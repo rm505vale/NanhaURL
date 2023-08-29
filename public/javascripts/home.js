@@ -1,3 +1,4 @@
+const baseUrl = 'http://localhost:3000/';
 $(document).ready(function(){
 
     $("#longUrl")
@@ -50,7 +51,7 @@ $(document).ready(function(){
                 return 0;
             }
             if(isUrlShortened(longUrl)) {
-                $('#status').html("nanhaurl.cyclic.app/ URL can't be Shortened").removeClass('hide');
+                $('#status').html(baseUrl + " URL can't be Shortened").removeClass('hide');
                 return 0;
             }
             if(checkForValidAlias(alias)) {
@@ -64,6 +65,7 @@ $(document).ready(function(){
             loading();
             urlShorten(longUrl, alias);
         });
+        console.log("ready");
   });
 
   function copyToClipboard() {
@@ -71,15 +73,18 @@ $(document).ready(function(){
     copyText.select();
     copyText.setSelectionRange(0, 99999);
     document.execCommand("copy");
+    console.log("inside copyToClipboard()");
   }
 
   function checkForValidUrl(url) {
     var regexp = /(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
+    console.log("inside checkForValidURL()");
     return regexp.test(url);
 }
 
 function isUrlShortened(url) {
-    if (url.indexOf("https://nanhaurl.cyclic.app") !== -1 || url.indexOf("http://nanhaurl.cyclic.app") !== -1 || url.indexOf("nanhaurl.cyclic.app") !== -1) {
+    console.log("inside isURLShortened()");
+    if (url.indexOf("https://localhost:3000") !== -1 || url.indexOf(baseUrl) !== -1 || url.indexOf("localhost:3000") !== -1) {
         return true;
     }
     return false;
@@ -87,16 +92,19 @@ function isUrlShortened(url) {
 
 
 function checkForValidAlias(alias) {
+    console.log("checkForValidAlias()");
     var regexp = /[^A-Za-z0-9_-]+/;
     return regexp.test(alias);
 }
 
 function checkForValidLengthOfAlias(alias){
+    console.log("inside checkForValidLengthOfAlias()");
     if(alias.length < 4 && alias.length > 0) return false;
     return true;
 }
 
 function urlShorten(longUrl, alias) {
+    console.log("inside urlShorten()");
     var t;
     var data = {
         'longUrl': longUrl
@@ -106,7 +114,8 @@ function urlShorten(longUrl, alias) {
     }
     var xhr = $.ajax({
 		type: 'POST',
-    	url: 'https://nanhaurl.cyclic.app/api/url/',
+    	url: baseUrl + 'api/url/',
+    	//url: baseUrl,
 		data: data,
 		error: function (err) {
             clearTimeout(t);
@@ -135,6 +144,7 @@ function urlShorten(longUrl, alias) {
 }
 
 function handleActions(response) {
+    console.log("inside handleActions()");
     if(!response.success) {
         removeLoader();
         $('#status').html(response.message).removeClass('hide');
@@ -150,14 +160,17 @@ function handleActions(response) {
 }
 
 function loading(){
+    console.log("inside loading()");
     $('#shortenBtn').html('Loading...');
 }
 
 function removeLoader(){
+    console.log("inside removeLoader()");
     $('#shortenBtn').html('Shorten');
 }
 
 function generateQRCode(shortUrl) {
+    console.log("inside generateQRCode()");
     $("#qrImage")
         .attr("src", 'http://chart.apis.google.com/chart?cht=qr&chs=180x180&choe=UTF-8&chld=H|0&chl=' + shortUrl );
     $('#qrImage')

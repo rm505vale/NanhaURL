@@ -1,4 +1,4 @@
 module.exports = {
-    'mongoUrl': 'mongodb+srv://dbUser:dbUser@nanhaurl-kbu6c.mongodb.net/nanhaurl?retryWrites=true&w=majority',
-    'baseUrl': 'https://nanhaurl.cyclic.app/'
+    'mongoUrl': 'mongodb+srv://vaibhav:vaibhav8@cluster0.nmghmce.mongodb.net/NanhaURLDatabase?retryWrites=true&w=majority',
+    'baseUrl': 'http://localhost:3000/'
 }

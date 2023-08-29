@@ -11,6 +11,7 @@ const urlRouter = express.Router();
 urlRouter.use(bodyParser.json());
 
 urlRouter.post('/', async (req,res,next) => {
+    
     var longUrl = req.body.longUrl.trim();
     var baseUrl = config.baseUrl;
     if(!validUrl.isWebUri(longUrl)) {

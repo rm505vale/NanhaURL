@@ -1,22 +1,29 @@
 {
-  "name": "nanhaurl",
-  "version": "0.0.0",
-  "private": true,
+  "name": "nanhalink",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node ./bin/start",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "author": "Samarth, Vaibhav",
+  "license": "ISC",
   "dependencies": {
-    "body-parser": "^1.19.0",
-    "cookie-parser": "~1.4.4",
+    "body-parser": "^1.20.2",
+    "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
-    "debug": "~2.6.9",
-    "ejs": "^3.1.3",
-    "express": "~4.16.1",
-    "http-errors": "~1.6.3",
-    "mongoose": "^5.9.20",
-    "morgan": "~1.9.1",
-    "nodemon": "^2.0.4",
-    "shortid": "^2.2.15",
+    "debug": "^4.3.4",
+    "ejs": "^3.1.9",
+    "express": "^4.18.2",
+    "http-errors": "^2.0.0",
+    "md5": "^2.3.0",
+    "mongoose": "^7.4.5",
+    "morgan": "^1.10.0",
+    "murmur": "^0.0.2",
+    "nodemin": "^1.0.1",
+    "path": "^0.12.7",
+    "shortid": "^2.2.16",
     "valid-url": "^1.0.9"
   }
 }
