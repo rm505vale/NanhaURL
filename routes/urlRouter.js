@@ -5,7 +5,7 @@ const config = require('../config');
 const shortid = require('shortid');
 const validUrl = require('valid-url');
 const Url = require('../models/url');
-
+const choices = require('./pagal');
 const urlRouter = express.Router();
 
 urlRouter.use(bodyParser.json());
@@ -51,37 +51,68 @@ urlRouter.post('/', async (req,res,next) => {
     else {
         var shortCode = shortid.generate();
     }
-    await Url.findOne({"shortCode": shortCode})
-        .then(async (url) => {
-            if(url) {
-                res.statusCode = 200;
-                res.setHeader('Content-Type', 'application/json');
-                var data = {
-                    'success': false,
-                    'message': 'Alias already exists.'
-                }
-                res.json(data);
-                return; 
-            }
-            
-            var url = new Url({
-                "longUrl": longUrl,
-                "shortCode": shortCode 
-            });
-            await Url.create(url)
-            .then((url) => {
-                res.statusCode = 200;
-                res.setHeader('Content-Type', 'application/json');
-                var shortUrl = baseUrl + url.shortCode;
-                var data = {
-                    'success': true,
-                    'shortUrl': shortUrl
-                }
-                res.json(data);
+
+    /*------------------bloom for shortCode------------*/
+    if(!choices.chk(shortCode))
+    {
+      //Not found
+      console.log("Bloom mai nhi hai");
+      var url = new Url({
+        "longUrl": longUrl,
+        "shortCode": shortCode 
+    });
+
+    await Url.create(url)
+                    .then((url) => {
+                        res.statusCode = 200;
+                        console.log("bloom filter mai created");
+                        res.setHeader('Content-Type', 'application/json');
+                        var shortUrl = baseUrl + url.shortCode;
+                        var data = {
+                            'success': true,
+                            'shortUrl': shortUrl
+                        }
+                        res.json(data);
+                    },(err) => next(err))
+                    .catch((err) => next(err));
+    
+        choices.ins(shortCode);
+    }
+    else{
+            await Url.findOne({"shortCode": shortCode})
+                .then(async (url) => {
+                    if(url) {
+                        res.statusCode = 200;
+                        res.setHeader('Content-Type', 'application/json');
+                        var data = {
+                            'success': false,
+                            'message': 'Alias already exists.'
+                        }
+                        res.json(data);
+                        return; 
+                    }
+                    
+                    var url = new Url({
+                        "longUrl": longUrl,
+                        "shortCode": shortCode 
+                    });
+                    await Url.create(url)
+                    .then((url) => {
+                        console.log("not creted in bloom filter");
+                        res.statusCode = 200;
+                        res.setHeader('Content-Type', 'application/json');
+                        var shortUrl = baseUrl + url.shortCode;
+                        var data = {
+                            'success': true,
+                            'shortUrl': shortUrl
+                        }
+                        choices.ins(shortCode);
+                        res.json(data);
+                    },(err) => next(err))
+                    .catch((err) => next(err));
             },(err) => next(err))
             .catch((err) => next(err));
-    },(err) => next(err))
-    .catch((err) => next(err));
+    }
 });
 
 module.exports = urlRouter;

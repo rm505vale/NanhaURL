@@ -60,9 +60,4 @@
     return hash >>> 0;
 }
 
-//const seed = 12345;
-//const input = "Hello, MurmurHash!";
-
-//const hashValue = murmurhash3_32(input, seed);
-//console.log(`Hash value: ${hashValue}`);
 module.exports=murmur;

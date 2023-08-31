@@ -10,15 +10,28 @@ var cors = require('cors');
 
 const mongoose = require('mongoose');
 const mongoUrl = config.mongoUrl;
-
+const choices = require('./routes/pagal');
 const connect = async() => await mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 
-connect().then((db) => {
+connect().then(async (db) => {
   console.log('Connected Correctly to server.')
+  const MongoDb = require('./models/url');
+  try{
+    const documents = await MongoDb.find({}).exec();
+    
+    documents.forEach(document => {
+      choices.ins(document['shortCode']);
+      console.log(document['shortCode']);
+    });
+  } 
+  catch (error) {
+    console.error('Error:', error);
+  }
 }, (err) => {
   console.log(err);
 });
 
+console.log("bhut dheere ya tez");
 var app = express();
 app.use(cors());
 // view engine setup
